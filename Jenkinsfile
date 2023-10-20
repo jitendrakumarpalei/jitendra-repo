@@ -47,6 +47,23 @@ pipeline {
             
             }
         }
+         stage(quality Gate status) {
+            steps {
+                script {
+                    withsonarQubeEnv('sonarqube') {
+                        sh 'mvn sonar:sonar'
+                       timeout(time: 1, unit: 'HOURS') {
+                        def qg = waitForQualitygate()
+                            if (qg.status != 'ok') {
+                                error "pipeline aborted due to quality gate Failure: ${qg>status}"
+                                
+                            }
+                       } 
+                    }
+                }
+            }
+        }
+
         
         
     }
