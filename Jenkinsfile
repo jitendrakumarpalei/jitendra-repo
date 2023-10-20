@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('CheckOut') {
             steps {
-                git 'https://github.com/jitendrakumarpalei/jitendra-repo.git'
+                git 'https://github.com/jitendrakumarpalei/jitendra-repo.git/'
             }
         }
         stage('Build') {
@@ -32,7 +32,8 @@ pipeline {
         }
         stage('S3-Upload') {
             steps {
-                sh "aws s3 cp ${env.WORKSPACE}/target/${ARTIFACTS_NAME} s3://jitu-bucketfull/${ARTIFACTS_NAME}"
+                sh "chmod +x ${env.WORKSPACE}/s3-upload.sh"
+                sh "./s3-upload.sh"
             }  
         }
         stage('Deploy') {
@@ -42,9 +43,13 @@ pipeline {
                 sh "cp -r ${env.WORKSPACE}/target/${ARTIFACTS_NAME} /opt/tomcat/webapps"
                 sh "/opt/tomcat/bin/shutdown.sh"
                 sh "/opt/tomcat/bin/startup.sh"
+                
+
             
             }
         }
+        
+        
     }
 }
         
