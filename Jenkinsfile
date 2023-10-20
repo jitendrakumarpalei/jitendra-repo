@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('CheckOut') {
             steps {
-                git branch: 'feature', url: 'https://github.com/jitendrakumarpalei/jitendra-repo.git'
+                git 'https://github.com/jitendrakumarpalei/jitendra-repo.git'
             }
         }
         stage('Build') {
